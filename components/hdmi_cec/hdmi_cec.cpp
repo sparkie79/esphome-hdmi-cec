@@ -19,16 +19,15 @@ void message_to_debug_string(char *message, const unsigned char *buffer, int cou
 }
 
 bool HdmiCec::LineState() {
-  int state = this->pin_->digital_read();
-  return state != LOW;
+  int state = this->rxpin_->digital_read();
+  return state != HIGH;
 }
 
 void HdmiCec::SetLineState(bool state) {
   if (state) {
-    this->pin_->pin_mode(gpio::FLAG_INPUT);
+    this->txpin_->digital_write(false);
   } else {
-    this->pin_->digital_write(false);
-    this->pin_->pin_mode(gpio::FLAG_OUTPUT);
+    this->txpin_->digital_write(true);
   }
 }
 
