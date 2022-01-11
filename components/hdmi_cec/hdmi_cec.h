@@ -45,8 +45,9 @@ class HdmiCec : public Component, CEC_Device {
     this->rxpin_ = rxpin;
     this->rxpin_->pin_mode(gpio::FLAG_INPUT);
    
-    this->expin_ = txpin;
-    this->expin_->pin_mode(gpio::FLAG_OUTPUT);
+    this->txpin_ = txpin;
+    this->txpin_->digital_write(false);
+    this->txpin_->pin_mode(gpio::FLAG_OUTPUT);
   }
   void add_trigger(HdmiCecTrigger *trigger);
   static void pin_interrupt(HdmiCec *arg);
