@@ -102,13 +102,14 @@ void HdmiCec::setup() {
   // This isn't quite enough to allow us to get rid of the HighFrequencyLoopRequester.
   // There's probably something that needs to wait a certain amount of time after
   // an interrupt.
-  this->pin_->attach_interrupt(HdmiCec::pin_interrupt, this, gpio::INTERRUPT_ANY_EDGE);
+  this->rxpin_->attach_interrupt(HdmiCec::pin_interrupt, this, gpio::INTERRUPT_ANY_EDGE);
 }
 
 void HdmiCec::dump_config() {
   ESP_LOGCONFIG(TAG, "HDMI-CEC:");
   ESP_LOGCONFIG(TAG, "  address: %d", this->address_);
-  LOG_PIN("  Pin: ", this->pin_);
+  LOG_PIN("  RX Pin: ", this->txpin_);
+  LOG_PIN("  TX Pin: ", this->txpin_);
 }
 
 void HdmiCec::send_data(uint8_t source, uint8_t destination, const std::vector<uint8_t> &data) {
