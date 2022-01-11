@@ -9,8 +9,8 @@ from esphome.const import (
     CONF_DATA,
     CONF_SOURCE,
     CONF_ADDRESS,
-    CONF_PIN_INPUT,
-    CONF_PIN_OUTPUT,
+    CONF_RX_PIN,
+    CONF_TX_PIN,
     CONF_ON_MESSAGE,
 )
 
@@ -45,8 +45,8 @@ CONFIG_SCHEMA = cv.All(
                 min=0, max=0xFFFE
             ),
             cv.Optional(CONF_PROMISCUOUS_MODE, default=False): cv.boolean,
-            cv.Required(CONF_PIN_OUTPUT): pins.internal_gpio_output_pin_schema,
-            cv.Required(CONF_PIN_INPUT): pins.internal_gpio_input_pin_schema,
+            cv.Required(CONF_TX_PIN): pins.internal_gpio_output_pin_schema,
+            cv.Required(CONF_RX_PIN): pins.internal_gpio_input_pin_schema,
             cv.Optional(CONF_ON_MESSAGE): automation.validate_automation(
                 {
                     cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(HdmiCecTrigger),
@@ -114,8 +114,8 @@ async def to_code(config):
     cg.add(var.set_address([config[CONF_ADDRESS]]))
     cg.add(var.set_physical_address([config[CONF_PHYSICAL_ADDRESS]]))
     cg.add(var.set_promiscuous_mode([config[CONF_PROMISCUOUS_MODE]]))
-    pin_input = await cg.gpio_pin_expression(config[CONF_PIN_INPUT])
-    pin_output = await cg.gpio_pin_expression(config[CONF_PIN_OUTPUT])
+    pin_input = await cg.gpio_pin_expression(config[CONF_RX_PIN])
+    pin_output = await cg.gpio_pin_expression(config[CONF_TX_PIN])
     cg.add(var.set_pin(pin_input,pin_output))
 
     for conf in config.get(CONF_ON_MESSAGE, []):
