@@ -41,9 +41,12 @@ class HdmiCec : public Component, CEC_Device {
   void set_address(uint8_t address) { this->address_ = address; }
   void set_physical_address(uint16_t physical_address) { this->physical_address_ = physical_address; }
   void set_promiscuous_mode(uint16_t promiscuous_mode) { this->promiscuous_mode_ = promiscuous_mode; }
-  void set_pin(InternalGPIOPin *pin) {
-    this->pin_ = pin;
-    this->pin_->pin_mode(gpio::FLAG_INPUT);
+  void set_pin(InternalGPIOPin *rxpin, InternalGPIOPin *txpin) {
+    this->rxpin_ = rxpin;
+    this->rxpin_->pin_mode(gpio::FLAG_INPUT);
+   
+    this->expin_ = txpin;
+    this->expin_->pin_mode(gpio::FLAG_OUTPUT);
   }
   void add_trigger(HdmiCecTrigger *trigger);
   static void pin_interrupt(HdmiCec *arg);
@@ -53,7 +56,8 @@ class HdmiCec : public Component, CEC_Device {
 
   template<typename... Ts> friend class HdmiCecSendAction;
 
-  InternalGPIOPin *pin_;
+  InternalGPIOPin *rxpin_;
+  InternalGPIOPin *txpin_;
   std::vector<HdmiCecTrigger *> triggers_{};
   uint8_t address_;
   uint16_t physical_address_;
