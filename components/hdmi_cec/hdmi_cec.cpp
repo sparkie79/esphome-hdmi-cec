@@ -108,7 +108,7 @@ void HdmiCec::setup() {
 void HdmiCec::dump_config() {
   ESP_LOGCONFIG(TAG, "HDMI-CEC:");
   ESP_LOGCONFIG(TAG, "  address: %d", this->address_);
-  LOG_PIN("  RX Pin: ", this->txpin_);
+  LOG_PIN("  RX Pin: ", this->rxpin_);
   LOG_PIN("  TX Pin: ", this->txpin_);
 }
 
